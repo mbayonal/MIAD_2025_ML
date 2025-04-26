@@ -84,6 +84,20 @@ parser.add_argument(
     help='Valence feature of the song', 
     location='args')
 
+parser.add_argument(
+    'duration_ms', 
+    type=float, 
+    required=True, 
+    help='Duration in milliseconds', 
+    location='args')
+    
+parser.add_argument(
+    'genre_encoded', 
+    type=int, 
+    required=True, 
+    help='Encoded genre value', 
+    location='args')
+
 model = joblib.load('songs_popularity.pkl')
 
 resource_fields = api.model('Resource', {
