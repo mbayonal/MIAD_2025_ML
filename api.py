@@ -101,8 +101,7 @@ parser.add_argument(
 model = joblib.load('songs_popularity.pkl')
 
 resource_fields = api.model('Resource', {
-    'popularity': fields.String,
-    'probability': fields.Float,
+    'popularity': fields.Float,
 })
 
 # Definición de la clase para disponibilización
@@ -134,14 +133,11 @@ class SongsPopularityApi(Resource):
                          'tempo', 'genre_encoded']
         features_df = pd.DataFrame(features, columns=feature_names)
         
+        # Para un modelo de regresión XGBRegressor
         prediction = model.predict(features_df)[0]
-        probability = model.predict_proba(features_df)[0][1]  # Probability of positive class
-        
-        result = "Popular" if prediction == 1 else "Not Popular"
         
         return {
-            "popularity": result,
-            "probability": float(probability)
+            "popularity": float(prediction)  # Convertir a float para serialización JSON
         }, 200
 
 if __name__ == '__main__':
