@@ -113,23 +113,25 @@ class SongsPopularityApi(Resource):
     @api.marshal_with(resource_fields)
     def get(self):
         args = parser.parse_args()
-        
-        # Parseo de features en arrays
+        # Parseo de features en arrays con el orden correcto que espera el modelo
         features = np.array([[
-            args['acousticness'],
+            args['duration_ms'],
             args['danceability'],
             args['energy'],
-            args['instrumentalness'],
-            args['liveness'],
             args['loudness'],
             args['speechiness'],
+            args['acousticness'],
+            args['instrumentalness'],
+            args['liveness'],
+            args['valence'],
             args['tempo'],
-            args['valence']
+            args['genre_encoded']
         ]])
         
         #asigna el nombre de los predictores
-        feature_names = ['acousticness', 'danceability', 'energy', 'instrumentalness', 
-                        'liveness', 'loudness', 'speechiness', 'tempo', 'valence']
+        feature_names = ['duration_ms', 'danceability', 'energy', 'loudness', 'speechiness', 
+                         'acousticness', 'instrumentalness', 'liveness', 'valence', 
+                         'tempo', 'genre_encoded']
         features_df = pd.DataFrame(features, columns=feature_names)
         
         prediction = model.predict(features_df)[0]
